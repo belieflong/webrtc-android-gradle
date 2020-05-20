@@ -158,6 +158,14 @@ task genWebrtcSrc(type: Exec) {
                     "--input_file sdk/android/api/org/webrtc/audio/JavaAudioDeviceModule.java " +
                     " && " +
 
+                    "mkdir -p ${webrtc_build_dir}/gen/sdk/android/generated_libsw_h264_jni ; " +
+                    "${py2} base/android/jni_generator/jni_generator.py --ptr_type=long --includes ../../../../../../sdk/android/src/jni/jni_generator_helper.h --use_proxy_hash -n \"webrtc::jni\" " +
+                    "--output_file ${webrtc_build_dir}/gen/sdk/android/generated_libsw_h264_jni/LibswH264Decoder_jni.h " +
+                    "--output_file ${webrtc_build_dir}/gen/sdk/android/generated_libsw_h264_jni/LibswH264Encoder_jni.h " +
+                    "--input_file sdk/android/api/org/webrtc/LibswH264Decoder.java " +
+                    "--input_file sdk/android/api/org/webrtc/LibswH264Encoder.java " +
+                    " && " +
+
                     "mkdir -p ${webrtc_build_dir}/gen/sdk/android/generated_libvpx_vp8_jni ; " +
                     "${py2} base/android/jni_generator/jni_generator.py --ptr_type=long --includes ../../../../../../sdk/android/src/jni/jni_generator_helper.h --use_proxy_hash -n \"webrtc::jni\" " +
                     "--output_file ${webrtc_build_dir}/gen/sdk/android/generated_libvpx_vp8_jni/LibvpxVp8Decoder_jni.h " +

@@ -1,0 +1,130 @@
+cmake_minimum_required(VERSION 3.4.1)
+
+include_directories(
+        #common
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/api/svc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/inc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src
+        #Processing
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/api/svc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/inc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/x86
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/interface
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/adaptivequantization
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/backgrounddetection
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/common
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/complexityanalysis
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/denoise
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/downsample
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/imagerotate
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/scenechangedetection
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/scrolldetection
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/vaacalc
+        # Encoder
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/api/svc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm/
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/inc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/x86
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/inc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/plus/inc
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/plus/src
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/interface
+)
+
+set(src_openh264_arm64
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/WelsTaskThread.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/WelsThread.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/WelsThreadLib.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/WelsThreadPool.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/common_tables.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/copy_mb.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/cpu.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/crt_util_safe_x.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/deblocking_common.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/expand_pic.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/intra_pred_common.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/mc.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/memory_align.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/sad_common.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/utils.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/src/welsCodecTrace.cpp
+
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm64/arm_arch64_common_macro.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm64/copy_mb_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm64/deblocking_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm64/expand_picture_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm64/intra_pred_common_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/common/arm64/mc_aarch64_neon.S
+
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/adaptivequantization/AdaptiveQuantization.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/backgrounddetection/BackgroundDetection.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/common/WelsFrameWork.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/common/WelsFrameWorkEx.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/common/memory.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/complexityanalysis/ComplexityAnalysis.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/denoise/denoise.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/denoise/denoise_filter.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/downsample/downsample.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/downsample/downsamplefuncs.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/imagerotate/imagerotate.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/imagerotate/imagerotatefuncs.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/scenechangedetection/SceneChangeDetection.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/scrolldetection/ScrollDetection.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/scrolldetection/ScrollDetectionFuncs.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/vaacalc/vaacalcfuncs.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/vaacalc/vaacalculation.cpp
+
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/arm64/adaptive_quantization_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/arm64/down_sample_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/arm64/pixel_sad_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/processing/src/arm64/vaa_calc_aarch64_neon.S
+
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/au_set.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/deblocking.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/decode_mb_aux.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/encode_mb_aux.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/encoder.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/encoder_data_tables.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/encoder_ext.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/get_intra_predictor.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/md.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/mv_pred.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/nal_encap.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/paraset_strategy.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/picture_handle.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/ratectl.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/ref_list_mgr_svc.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/sample.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/set_mb_syn_cabac.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/set_mb_syn_cavlc.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/slice_multi_threading.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_base_layer_md.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_enc_slice_segment.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_encode_mb.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_encode_slice.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_mode_decision.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_motion_estimate.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_set_mb_syn_cabac.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/svc_set_mb_syn_cavlc.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/wels_preprocess.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/wels_task_base.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/wels_task_encoder.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/src/wels_task_management.cpp
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/plus/src/welsEncoderExt.cpp
+
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/arm64/intra_pred_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/arm64/intra_pred_sad_3_opt_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/arm64/memory_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/arm64/pixel_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/arm64/reconstruct_aarch64_neon.S
+        ${WEBRTC_REPO}/third_party/openh264/src/codec/encoder/core/arm64/svc_motion_estimation_aarch64_neon.S
+        )
+
+add_library(openh264 STATIC
+        ${src_openh264_arm64}
+        )

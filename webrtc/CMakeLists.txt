@@ -5,10 +5,14 @@ set(CWD ${CMAKE_CURRENT_LIST_DIR})
 set(TEST_CC_FILTER ".*gunit.cc|.*/mock/.*|.*mock_.*|.*/mocks/.*|.*fake.*|.*/test/.*|.*/tests/.*|.*_test_.*|.*unittest.*|.*/end_to_end_tests/.*|.*_test.cc|.*_tests.cc|.*_integrationtest.cc|.*_perftest.cc|.*test_utils.cc|.*testutils.cc|.*testclient.cc|.*test.c")
 set(OTHER_PLATFORM_CC_FILTER ".*_chromeos.cc|.*_freebsd.cc|.*_fuchsia.cc|.*/fuchsia/.*|.*_ios.cc|.*_ios.mm|.*/ios/.*|.*_mac.cc|.*_mac.mm|.*/mac/.*|.*_openbsd.cc|.*_win.cc|.*/win/.*|.*win32.*|.*/windows/.*|.*sse.cc|.*sse2.cc|.*_mips.cc|.*_mips.c")
 
+enable_language(ASM)
+set(CMAKE_ASM_COMPILER ${CMAKE_C_COMPILER})
+
 # add at first, avoid header search path, definition chaos
 add_subdirectory(third_party)
 
 add_definitions(-DWEBRTC_POSIX=1, -DWEBRTC_LINUX=1, -DWEBRTC_ANDROID=1)
+add_definitions(-DWEBRTC_USE_H264=1)
 add_definitions(-DWEBRTC_ENABLE_PROTOBUF=1)
 add_definitions(-DWEBRTC_INCLUDE_INTERNAL_AUDIO_DEVICE)
 add_definitions(-DHAVE_PTHREAD -DHAVE_SCTP -DHAVE_WEBRTC_VIDEO -DHAVE_WEBRTC_VOICE)
@@ -49,6 +53,7 @@ include_directories(
     ${WEBRTC_REPO}/third_party/boringssl/src/include
     ${WEBRTC_REPO}/third_party/icu/source/common
     ${WEBRTC_REPO}/third_party/ffmpeg
+    ${WEBRTC_REPO}/third_party/ffmpeg/chromium/config/Chrome/android/arm64
     ${WEBRTC_REPO}/third_party/jsoncpp/source/include
     ${WEBRTC_REPO}/third_party/libsrtp/config
     ${WEBRTC_REPO}/third_party/libsrtp/crypto/include
@@ -118,7 +123,8 @@ file(GLOB_RECURSE src_modules
 list(FILTER src_modules EXCLUDE REGEX ${TEST_CC_FILTER})
 list(FILTER src_modules EXCLUDE REGEX ${OTHER_PLATFORM_CC_FILTER})
 list(FILTER src_modules EXCLUDE REGEX 
-    ".*/desktop_capture/.|.*/linux/.*|.*include/audio_device_factory.cc|.*bwe_simulations.cc|.*/audio_coding/neteq/tools/.*|.*/remote_bitrate_estimator/tools/.*|.*rnn_vad_tool.cc|.*null_aec_dump_factory.cc|.*h264_color_space.cc|.*vp9_noop.cc|.*h264_decoder_impl.cc|.*h264_encoder_impl.cc|.*/android/aaudio_.*|.*ensure_initialized.cc|.*fixed_gain_controller.cc|.*click_annotate.cc"
+    #".*/desktop_capture/.|.*/linux/.*|.*include/audio_device_factory.cc|.*bwe_simulations.cc|.*/audio_coding/neteq/tools/.*|.*/remote_bitrate_estimator/tools/.*|.*rnn_vad_tool.cc|.*null_aec_dump_factory.cc|.*h264_color_space.cc|.*vp9_noop.cc|.*h264_decoder_impl.cc|.*h264_encoder_impl.cc|.*/android/aaudio_.*|.*ensure_initialized.cc|.*fixed_gain_controller.cc|.*click_annotate.cc"
+    ".*/desktop_capture/.|.*/linux/.*|.*include/audio_device_factory.cc|.*bwe_simulations.cc|.*/audio_coding/neteq/tools/.*|.*/remote_bitrate_estimator/tools/.*|.*rnn_vad_tool.cc|.*null_aec_dump_factory.cc|.*vp9_noop.cc|.*/android/aaudio_.*|.*ensure_initialized.cc|.*fixed_gain_controller.cc|.*click_annotate.cc"
 )
 
 file(GLOB_RECURSE src_ortc
@@ -210,6 +216,8 @@ target_link_libraries(jingle_peerconnection_so
     ssl
     usrsctp
     vpx
+    openh264
+    ffmpeg
     yuv
 
     android
