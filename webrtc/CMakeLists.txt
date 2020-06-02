@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.7)
 
 set(CWD ${CMAKE_CURRENT_LIST_DIR})
 
+if (${WEBRTC_BUILD_SIMPLIFY} STREQUAL "true")
+set(WEBRTC_REPO ${CWD}/${WEBRTC_REPO_RELATIVE})
+endif()
+
 set(TEST_CC_FILTER ".*gunit.cc|.*/mock/.*|.*mock_.*|.*/mocks/.*|.*fake.*|.*/test/.*|.*/tests/.*|.*_test_.*|.*unittest.*|.*/end_to_end_tests/.*|.*_test.cc|.*_tests.cc|.*_integrationtest.cc|.*_perftest.cc|.*test_utils.cc|.*testutils.cc|.*testclient.cc|.*test.c")
 set(OTHER_PLATFORM_CC_FILTER ".*_chromeos.cc|.*_freebsd.cc|.*_fuchsia.cc|.*/fuchsia/.*|.*_ios.cc|.*_ios.mm|.*/ios/.*|.*_mac.cc|.*_mac.mm|.*/mac/.*|.*_openbsd.cc|.*_win.cc|.*/win/.*|.*win32.*|.*/windows/.*|.*sse.cc|.*sse2.cc|.*_mips.cc|.*_mips.c")
 
@@ -9,7 +13,10 @@ enable_language(ASM)
 set(CMAKE_ASM_COMPILER ${CMAKE_C_COMPILER})
 
 # add at first, avoid header search path, definition chaos
+
+if (!${WEBRTC_BUILD_SIMPLIFY} STREQUAL "true")
 add_subdirectory(third_party)
+endif()
 
 add_definitions(-DWEBRTC_POSIX=1, -DWEBRTC_LINUX=1, -DWEBRTC_ANDROID=1)
 add_definitions(-DWEBRTC_USE_H264=1)
@@ -201,27 +208,79 @@ add_library(jingle_peerconnection_so SHARED
     ${src_video}
 )
 
-target_link_libraries(jingle_peerconnection_so
-    absl::optional
-    absl::variant
-    absl::strings
-    crypto
-    event
-    #json
-    opus
-    pffft
-    protobuf_lite
-    rnnoise
-    srtp
-    ssl
-    usrsctp
-    vpx
-    openh264
-    ffmpeg
-    yuv
+if (${WEBRTC_BUILD_SIMPLIFY} STREQUAL "true")
+    target_link_libraries(jingle_peerconnection_so
+        #absl::optional
+        #absl::variant
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_base.a
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_throw_delegate.a
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_int128.a
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_spinlock_wait.a
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_bad_optional_access.a
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_bad_variant_access.a
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_spinlock_wait.a
+        #absl::strings
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_strings_internal.a
+        ${WEBRTC_REPO}/out/libs_third_party/libabsl_absl_strings.a
+        #crypto
+        ${WEBRTC_REPO}/out/libs_third_party/libdecrepit.a
+        ${WEBRTC_REPO}/out/libs_third_party/libcrypto.a
+        ${WEBRTC_REPO}/out/libs_third_party/libboringssl_gtest.a
+        ${WEBRTC_REPO}/out/libs_third_party/libtest_support_lib.a
+        #event
+        ${WEBRTC_REPO}/out/libs_third_party/libevent.a
+        #json
+        #opus
+        ${WEBRTC_REPO}/out/libs_third_party/libopus.a
+        #pffft
+        ${WEBRTC_REPO}/out/libs_third_party/libpffft.a
+        #protobuf_lite
+        ${WEBRTC_REPO}/out/libs_third_party/libprotobuf_lite.a
+        #rnnoise
+        ${WEBRTC_REPO}/out/libs_third_party/librnnoise.a
+        #srtp
+        ${WEBRTC_REPO}/out/libs_third_party/libsrtp.a
+        #ssl
+        ${WEBRTC_REPO}/out/libs_third_party/libssl.a
+        #usrsctp
+        ${WEBRTC_REPO}/out/libs_third_party/libusrsctp.a
+        #vpx
+        ${WEBRTC_REPO}/out/libs_third_party/libvpx.a
+        #openh264
+        ${WEBRTC_REPO}/out/libs_third_party/libopenh264.a
+        #ffmpeg
+        ${WEBRTC_REPO}/out/libs_third_party/libffmpeg.a
+        #yuv
+        ${WEBRTC_REPO}/out/libs_third_party/libyuv.a
 
-    android
-    log
-    GLESv2
-    OpenSLES
-)
+        android
+        log
+        GLESv2
+        OpenSLES
+    )
+else()
+    target_link_libraries(jingle_peerconnection_so
+        absl::optional
+        absl::variant
+        absl::strings
+        crypto
+        event
+        #json
+        opus
+        pffft
+        protobuf_lite
+        rnnoise
+        srtp
+        ssl
+        usrsctp
+        vpx
+        openh264
+        ffmpeg
+        yuv
+
+        android
+        log
+        GLESv2
+        OpenSLES
+    )
+endif()
