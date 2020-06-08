@@ -56,6 +56,9 @@ include_directories(
 
     ${WEBRTC_REPO}/${WEBRTC_BUILD_DIR}/gen
 
+    ${ANDROID_SYSROOT}/usr/include/aarch64-linux-android
+    ${WEBRTC_REPO}/third_party/android_ndk/sources/android/cpufeatures
+
     ${WEBRTC_REPO}/third_party/abseil-cpp
     ${WEBRTC_REPO}/third_party/boringssl/src/include
     ${WEBRTC_REPO}/third_party/icu/source/common
@@ -70,6 +73,10 @@ include_directories(
     ${WEBRTC_REPO}/third_party/opus/src/include
     ${WEBRTC_REPO}/third_party/protobuf/src
     ${WEBRTC_REPO}/third_party/usrsctp/usrsctplib
+)
+
+file(GLOB_RECURSE ndk_api
+    ${WEBRTC_REPO}/third_party/android_ndk/sources/android/cpufeatures/cpu-features.c
 )
 
 file(GLOB_RECURSE src_api
@@ -190,6 +197,7 @@ list(FILTER src_video EXCLUDE REGEX
 )
 
 add_library(jingle_peerconnection_so SHARED
+    ${ndk_api}
     ${src_api}
     ${src_audio}
     ${src_call}
