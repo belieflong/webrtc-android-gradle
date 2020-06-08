@@ -38,3 +38,5 @@ obj/
 
 #jni源码工程可忽略lib
 #libs/
+
+release/
